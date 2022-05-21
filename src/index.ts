@@ -1,13 +1,18 @@
-import pkg from 'node-pix-payload';
+import express, { json } from "express";
+import "express-async-errors";
+import cors from "cors";
+import router from "./routers/index.js";
+import dotenv from "dotenv";
+dotenv.config();
 
-const payload_static = pkg.setPixKey('1c995784-b8a4-482a-952e-4b8cd6928216')
-.setDescription('payment xyz')
-.setMerchantName('IJ Solutions')
-.setMerchantCity('MACEIO')
-.setAmount('100.00')
-.setTxid('ij123');
+const app = express();
 
-payload_static.getData().then((data) =>{
-    console.log(data)
+app.use(cors());
+app.use(json());
+app.use(router);
+
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`Listening on ${PORT}`);
 })
-.catch(err => console.log(err)); 
