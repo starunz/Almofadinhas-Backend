@@ -1,16 +1,32 @@
 import pkg from 'node-pix-payload';
 
-export function QRCode () {
+import { Request, Response } from "express";
 
-    const payload_static = pkg.setPixKey('1c995784-b8a4-482a-952e-4b8cd6928216')
-    .setDescription('payment xyz')
-    .setMerchantName('IJ Solutions')
-    .setMerchantCity('MACEIO')
-    .setAmount('100.00')
-    .setTxid('ij123');
+export function QRCode (req: Request, res: Response) {
+    const {
+        keyPix,
+        nameOng,
+        description,
+        amount,
+        id,
+        city
+    } = req.body;
+    console.log(req.body)
+    console.log(amount)
+
+    //const ue = amount.replace('.','').replace(',','.').replace(' ','').replace("R$", '')
+    //console.log(ue)
+
+    const payload_static = pkg.setPixKey(keyPix)
+    .setDescription(description)
+    .setMerchantName(nameOng)
+    .setMerchantCity(city)
+    .setAmount(amount)
+    .setTxid(id);
     
     payload_static.getData().then((data: any) =>{
         console.log(data)
+        res.send(data)
     })
     .catch((err: any) => console.log(err)); 
 }

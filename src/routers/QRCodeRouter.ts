@@ -4,6 +4,6 @@ import { QRCode } from "../QRCode/index.js";
 
 const QRCodeRouter = Router();
 
-QRCodeRouter.post("/qrcode", QRCode);
+QRCodeRouter.post("/donation", QRCode);
 
 export default QRCodeRouter;
