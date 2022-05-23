@@ -1,8 +1,8 @@
-import pkg from 'node-pix-payload';
+import donation from 'node-pix-payload';
 
 import { Request, Response } from "express";
 
-export function QRCode (req: Request, res: Response) {
+export async function QRCode (req: Request, res: Response) {
     const {
         keyPix,
         nameOng,
@@ -11,22 +11,18 @@ export function QRCode (req: Request, res: Response) {
         id,
         city
     } = req.body;
-    console.log(req.body)
-    console.log(amount)
 
-    //const ue = amount.replace('.','').replace(',','.').replace(' ','').replace("R$", '')
-    //console.log(ue)
+    const newPixKey = keyPix.replace('.', '').replace('/', '').replace('-', '').replace('.', '').replace('.', '');
+    const newAmount = amount.replace('.','').replace(',','.').replace(' ','').replace("R$", '').toString();
 
-    const payload_static = pkg.setPixKey(keyPix)
+    const payload_static = donation.setPixKey(newPixKey)
     .setDescription(description)
     .setMerchantName(nameOng)
     .setMerchantCity(city)
-    .setAmount(amount)
+    .setAmount(newAmount)
     .setTxid(id);
-    
-    payload_static.getData().then((data: any) =>{
-        console.log(data)
-        res.send(data)
-    })
-    .catch((err: any) => console.log(err)); 
+
+    const data = await payload_static.getData();
+
+    res.send(data);
 }
